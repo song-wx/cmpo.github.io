@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#153bde">
+  <meta name="description" content="CMPO: Chunk-wise Model-based Policy Optimization. Single-call model-gradient reinforcement learning, evaluated on 19 HumanoidBench tasks and deployed on Unitree Go2.">
+  <meta property="og:title" content="CMPO | Chunk-wise Model-based Policy Optimization">
+  <meta property="og:description" content="Multi-step foresight. A single model call. CoRL 2026 research on efficient model-based reinforcement learning.">
+  <meta property="og:type" content="website">
+  <title>CMPO — Chunk-wise Model-based Policy Optimization</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23153bde'/%3E%3Cpath d='M28 12H15v16h13M12 20h14' fill='none' stroke='white' stroke-width='4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<main id="main">
+  <section class="hero paper-heading wrap" aria-labelledby="paper-title">
+    <div class="eyebrow"><span class="conference">CoRL 2026</span> 10th Conference on Robot Learning</div>
+    <h1 id="paper-title"><span>Chunk-wise</span><br>Model-based Policy Optimization</h1>
+    <div class="authors"><span>Weixi Song<sup>1,2,3</sup></span><span>Donglin Wang<sup>3,†</sup></span><span>Yong-Lu Li<sup>2,4,†</sup></span></div>
+    <p class="affiliations"><span><sup>1</sup> Zhejiang University</span><span><sup>2</sup> Shanghai Innovation Institute</span><span><sup>3</sup> Westlake University</span><span><sup>4</sup> Shanghai Jiao Tong University</span></p>
+    <p class="corresponding">† Corresponding authors</p>
+    <div class="paper-links" aria-label="Paper and code resources">
+      <a class="button resource-link" href="assets/cmpo-paper.pdf" target="_blank" rel="noopener">
+        <svg class="resource-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg>
+        <span>Paper</span>
+      </a>
+      <span class="resource-placeholder">
+        <button class="button resource-link" type="button" aria-disabled="true" aria-describedby="arxiv-coming-soon">
+          <svg class="resource-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 3 12 18M18 3 6 21M4 7l4-4M16 21l4-4"/></svg>
+          <span>arXiv</span>
+        </button>
+        <span class="resource-tooltip" id="arxiv-coming-soon" role="tooltip">Coming soon</span>
+      </span>
+      <span class="resource-placeholder">
+        <button class="button resource-link" type="button" aria-disabled="true" aria-describedby="code-coming-soon">
+          <svg class="resource-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 6-6 6 6 6M17 6l6 6-6 6M14 4l-4 16"/></svg>
+          <span>Code</span>
+        </button>
+        <span class="resource-tooltip" id="code-coming-soon" role="tooltip">Coming soon</span>
+      </span>
+    </div>
+  </section>
+  <section id="video" class="video-section"><div class="wrap"><div class="section-heading"><div><span class="section-number">01 / PRESENTATION</span><h2>The idea in two minutes.</h2></div><span class="duration">02:14 / RESEARCH OVERVIEW</span></div><video class="presentation" controls playsinline preload="none" poster="assets/presentation-poster.jpg" aria-label="CMPO narrated research presentation"><source src="assets/cmpo-presentation.mp4" type="video/mp4">Your browser does not support embedded video. <a href="assets/cmpo-presentation.mp4">Download the presentation.</a></video><p class="video-caption">From the recurrent-rollout bottleneck to collaborative chunk-wise modeling and real-robot deployment.</p></div></section>
+  <section id="method" class="section wrap">
+    <div class="section-heading"><div><span class="section-number">02 / METHOD</span><h2>One chunk. One forward pass.</h2></div><p>Model gradients for learning.<br>A direct policy for deployment.</p></div>
+    <div class="method-grid"><figure class="method-figure"><img src="assets/method.jpg" width="537" height="713" loading="lazy" alt="CMPO computation graph: the policy predicts an action chunk; the world model predicts the latent chunk; reward and terminal value yield the actor objective."><figcaption>Collaborative chunk-wise policy update.<br>Figure 1 from the paper.</figcaption></figure><div class="method-steps"><article><span class="step">1</span><div><h3>Predict an action chunk</h3><p>Encode the current state, then generate H future actions with a single actor query.</p><div class="formula">a<sub>t:t+H−1</sub> = π(z<sub>t</sub>)</div></div></article><article><span class="step">2</span><div><h3>Evaluate the future together</h3><p>The chunk world model maps the current latent state and the entire action sequence directly to future latent states.</p><div class="formula">z<sub>t+1:t+H</sub> = f(z<sub>t</sub>, a<sub>t:t+H−1</sub>)</div></div></article><article><span class="step">3</span><div><h3>Optimize through the model</h3><p>Predicted rewards and a terminal critic form an (H−1)-step value expansion. Gradients pass through a single chunk prediction instead of a recurrent rollout.</p></div></article><div class="deployment-note"><span>AT DEPLOYMENT</span><p>Predict a chunk, execute its <strong>first action</strong>, and repeat from the next observation. No test-time planning is used in the main experiments.</p></div></div></div>
+  </section>
+  <section id="results" class="results-section"><div class="wrap section">
+    <div class="section-heading"><div><span class="section-number">03 / EXPERIMENTS</span><h2>Efficient learning.<br>Responsive control.</h2></div><p>19 whole-body control tasks.<br>61-dimensional action space.</p></div>
+    <p class="results-intro">CMPO achieves the strongest average performance among the evaluated baselines and outperforms them on the majority of selected HumanoidBench tasks. All main experiments use a chunk horizon of H = 3.</p>
+    <figure class="results-figure"><a href="assets/all-results.jpg" target="_blank" rel="noopener" aria-label="Open learning curves at full size"><img src="assets/all-results.jpg" width="1323" height="540" loading="lazy" alt="Learning curves for the average across 19 tasks, comparing CMPO, MAAC, TD-MPC2, DreamerV3, SAC, and PPO."></a><figcaption><strong>HumanoidBench learning curves.</strong> Average over 19 tasks. Mean of 3 runs; shaded regions show 95% confidence intervals. </figcaption></figure>
+    <div class="efficiency-grid"><div><span class="eyebrow">COMPUTATIONAL EFFICIENCY</span><h3>More time learning.<br>Less time planning.</h3><p>Single-call predictions reduce sequential training work. At inference, the actor directly outputs actions without iterative MPC optimization.</p><p class="small">Table 1. Single NVIDIA RTX 4090; identical settings; no Torch Compile. Training time measured over 200k steps. Lower is better.</p></div><div class="table-wrap"><table><caption>Training and inference wall-time</caption><thead><tr><th scope="col">Task / measurement</th><th scope="col">TD-MPC2</th><th scope="col">CMPO</th></tr></thead><tbody><tr><th scope="row">Walk <span>Training / 200k steps</span></th><td>3.57 h</td><td class="ours">1.74 h</td></tr><tr><th scope="row">Run <span>Training / 200k steps</span></th><td>3.54 h</td><td class="ours">1.72 h</td></tr><tr><th scope="row">Walk <span>Inference / step</span></th><td>40.8 ms</td><td class="ours">1.4 ms</td></tr><tr><th scope="row">Run <span>Inference / step</span></th><td>39.5 ms</td><td class="ours">1.3 ms</td></tr></tbody></table></div></div>
+  </div></section>
+  <section class="section wrap real-world"><div class="section-heading"><div><span class="section-number">04 / SIM-TO-REAL</span><h2>From simulation<br>to standing on two legs.</h2></div><p>Unitree Go2 quadruped.<br>Bipedal locomotion.</p></div><figure><img src="assets/sim-to-real.jpg" width="1277" height="423" loading="lazy" alt="Unitree Go2 transitions into an upright posture in the real world and in simulation; a plot compares CMPO and SAC linear velocity tracking reward."><figcaption>Real-world and simulated standing locomotion, alongside the simulation training curve. Figure 3 from the paper.</figcaption></figure><div class="real-copy"><p>Trained in Isaac Gym and transferred to the physical Go2, the policy controls all 12 actuated joints through residual joint-position commands. CMPO discovers standing earlier and achieves higher tracking reward than SAC in the reported simulation experiment.</p><div class="trial-result"><strong>7<span>/10</span></strong><p>successful hardware trials for CMPO<br><span>versus 4/10 for SAC · Maintaining a bipedal posture for 20 seconds</span></p></div></div></section>
+  <section class="discussion-section"><div class="section wrap"><div class="section-heading"><div><span class="section-number">05 / ANALYSIS</span><h2>Why the chunk model matters.</h2></div></div><div class="findings"><article><span>01</span><h3>A shorter gradient path</h3><p>Compared with recurrent MAAC updates, CMPO exhibits more stable gradient norms and smaller excursions as the tested horizon increases.</p></article><article><span>02</span><h3>Both components matter</h3><p>Keeping the chunk actor but reverting to a single-step world model substantially degrades performance in the reported ablation.</p></article><article><span>03</span><h3>Prediction still has limits</h3><p>Chunking removes recurrent temporal depth, but direct long-horizon prediction remains difficult. Performance drops at H = 5 in the horizon study.</p></article></div><details class="analysis-details"><summary>Explore gradient stability <span aria-hidden="true">+</span></summary><figure><img src="assets/stability.jpg" width="1310" height="467" loading="lazy" alt="Gradient norm comparisons between CMPO and MAAC over training and across horizons."><figcaption>Figure 4. The left panel uses separate vertical scales for the two methods; the right panel compares gradient norms across horizons on a shared scale.</figcaption></figure></details></div></section>
+  <section id="citation" class="section wrap citation-section"><div><span class="section-number">06 / CITATION</span><h2>Cite this work.</h2><p>Chunk-wise Model-based Policy Optimization<br>Conference on Robot Learning, 2026</p></div><div class="citation-box"><div class="citation-toolbar"><span>BIBTEX</span><button id="copy-citation" type="button">Copy citation</button></div><pre id="bibtex">@inproceedings{song2026cmpo,
+  title     = {Chunk-wise Model-based Policy Optimization},
+  author    = {Song, Weixi and Wang, Donglin and Li, Yong-Lu},
+  booktitle = {Conference on Robot Learning},
+  year      = {2026}
+}</pre><span id="copy-status" role="status" aria-live="polite"></span></div></section>
+</main>
+<footer class="wrap"><a class="brand" href="#">CMPO<span class="brand-year"> / CoRL 2026</span></a><span>Chunk-wise Model-based Policy Optimization</span><a href="assets/cmpo-paper.pdf" target="_blank" rel="noopener">Paper ↗</a></footer>
+</body>
+</html>
